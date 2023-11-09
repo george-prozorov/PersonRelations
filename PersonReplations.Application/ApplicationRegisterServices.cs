@@ -1,10 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PersonReplations.Application
 {
@@ -12,6 +8,9 @@ namespace PersonReplations.Application
   {
     public static IServiceCollection ConfigureApplicationServices(this IServiceCollection services)
     {
+      var thisAssembly = Assembly.GetExecutingAssembly();
+      services.AddMediatR(o => o.RegisterServicesFromAssemblies(thisAssembly));
+      services.AddValidatorsFromAssembly(thisAssembly);
       return services;
     }
   }

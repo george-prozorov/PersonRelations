@@ -11,10 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\PersonReplations.Application\PersonReplations.Application.csproj" />
     <ProjectReference Include="..\PersonReplations.Persistence\PersonReplations.Persistence.csproj" />
   </ItemGroup>
