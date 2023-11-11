@@ -15,4 +15,5 @@ public class Person : EntityBase
   public string ImagePath { get; set; } = string.Empty;
 
   public IEnumerable<Contact> Contacts { get; set; } = Enumerable.Empty<Contact>();
+  public IEnumerable<PersonRelation> PersonRelations { get; set; } = Enumerable.Empty<PersonRelation>();
 }

@@ -11,6 +11,7 @@ public static class ApplicationRegisterServices
     var thisAssembly = Assembly.GetExecutingAssembly();
     services.AddMediatR(o => o.RegisterServicesFromAssemblies(thisAssembly));
     services.AddValidatorsFromAssembly(thisAssembly);
+    services.AddAutoMapper(thisAssembly);
     return services;
   }
 }

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using PersonReplations.Application.Features.Person;
+using PersonReplations.Application.Features.PersonFeatures;
 
 namespace PersonRelations.API.Controllers;
 
@@ -25,6 +25,7 @@ public class PersonController : ControllerBase
   [Route("{perosnId}")]
   public async Task<IActionResult> Get(int personId)
   {
+    await _sender.Send(personId);
     return Ok();
   }
 }

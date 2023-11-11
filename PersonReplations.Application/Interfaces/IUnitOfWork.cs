@@ -2,6 +2,6 @@
 
 public interface IUnitOfWork : IDisposable
 {
-  IPersonRepository personRepository { get; }
+  IPersonRepository PersonRepository { get; }
   Task SaveChangesAsync();
 }

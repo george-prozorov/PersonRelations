@@ -8,8 +8,6 @@ public class UnitOfWork : IUnitOfWork
 
   public IPersonRepository PersonRepository { get; }
 
-  IPersonRepository IUnitOfWork.personRepository => throw new NotImplementedException();
-
   public UnitOfWork(PersonRelationsDbContext db, IPersonRepository personRepository)
   {
     _db = db;
@@ -24,5 +22,6 @@ public class UnitOfWork : IUnitOfWork
   public void Dispose()
   {
     _db.Dispose();
+    GC.SuppressFinalize(this);
   }
 }

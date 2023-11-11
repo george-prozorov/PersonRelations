@@ -20,9 +20,11 @@ public class ValidationFilter : IActionFilter
 
     var requestType = request.GetType();
     var validatorType = typeof(IValidator<>).MakeGenericType(requestType);
-    var validator = _serviceProvider.GetService(validatorType) as IValidator;
-
-    if (validator == null) return;
+    object? service = _serviceProvider.GetService(validatorType);
+    IValidator validator;
+    if (service is IValidator validatorService)
+      validator = validatorService;
+    else return;
 
     var contextType = typeof(ValidationContext<>).MakeGenericType(requestType);
     var validationContext = Activator.CreateInstance(contextType, request);

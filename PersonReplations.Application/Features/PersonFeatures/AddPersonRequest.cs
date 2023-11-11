@@ -1,8 +1,10 @@
-﻿using FluentValidation;
+﻿using AutoMapper;
+using FluentValidation;
 using MediatR;
 using PersonReplations.Application.Interfaces;
+using PersonReplations.Domain.Entities;
 
-namespace PersonReplations.Application.Features.Person;
+namespace PersonReplations.Application.Features.PersonFeatures;
 
 public class AddPersonRequest : IRequest
 {
@@ -25,16 +27,21 @@ public class Contact
 public class AddPersonRequestHandler : IRequestHandler<AddPersonRequest>
 {
   private readonly IUnitOfWork _unitOfWork;
-  public AddPersonRequestHandler(IUnitOfWork unitOfWork)
+  private readonly IMapper _mapper;
+  public AddPersonRequestHandler(IUnitOfWork unitOfWork, IMapper mapper)
   {
     _unitOfWork = unitOfWork;
+    _mapper = mapper;
   }
-  public Task Handle(AddPersonRequest request, CancellationToken cancellationToken)
+  public async Task Handle(AddPersonRequest request, CancellationToken cancellationToken)
   {
     //BirthDate Validation
     //latinuri da qartuli asoebis narevi aq xom ar gamovitano?
     //piradi nomris lenght xom ar gamoitano aq?
-    throw new NotImplementedException();
+    throw new Exception("error here");
+    var person = _mapper.Map<Person>(request);
+    await _unitOfWork.PersonRepository.AddAsync(person);
+    await _unitOfWork.SaveChangesAsync();
   }
 }
 

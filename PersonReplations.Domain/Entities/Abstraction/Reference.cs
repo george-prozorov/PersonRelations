@@ -2,5 +2,5 @@
 
 public abstract class Reference : EntityBase
 {
-  public string DisplayName { get; set; }
+  public string DisplayName { get; set; } = string.Empty;
 }
