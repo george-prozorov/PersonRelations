@@ -18,12 +18,19 @@ public class PersonConfig : IEntityTypeConfiguration<Person>
       .Property(p => p.PersonalId)
       .HasMaxLength(11);
     builder
+      .Property(p => p.BirthDate)
+      .HasColumnType("date");
+    builder
+      .Property(p => p.ImagePath)
+      .HasMaxLength(50);
+    builder
       .Property(p => p.IsActive)
       .IsRequired()
       .HasDefaultValue(true);
     builder
       .Property(p => p.CreatedAd)
-      .HasDefaultValue("getdate()");
+      .HasColumnType("datetime")
+      .HasDefaultValueSql("getdate()");
 
 
     builder

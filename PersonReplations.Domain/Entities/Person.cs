@@ -12,7 +12,7 @@ public class Person : EntityBase
   public DateTime BirthDate { get; set; }
   public int CityId { get; set; }
   public City? City { get; set; }
-  public string ImagePath { get; set; } = string.Empty;
+  public string? ImagePath { get; set; }
 
   public IEnumerable<Contact> Contacts { get; set; } = Enumerable.Empty<Contact>();
   public IEnumerable<PersonRelation> PersonRelations { get; set; } = Enumerable.Empty<PersonRelation>();

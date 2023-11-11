@@ -18,7 +18,8 @@ internal class GenderConfig : IEntityTypeConfiguration<Gender>
     builder
       .Property(p => p.CreatedAd)
       .IsRequired()
-      .HasDefaultValue("getdate()");
+      .HasColumnType("datetime")
+      .HasDefaultValueSql("getdate()");
     builder
       .HasQueryFilter(p => p.IsActive == true);
   }
