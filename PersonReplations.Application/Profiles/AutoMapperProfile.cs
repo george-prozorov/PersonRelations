@@ -13,7 +13,8 @@ namespace PersonReplations.Application.Profiles
   {
     public AutoMapperProfile()
     {
-      CreateMap<AddPersonRequest, Person>().IncludeAllDerived().ReverseMap();
+      CreateMap<AddPersonRequest, Person>();
+      CreateMap<AddContactRequest, Contact>();
     }
   }
 }

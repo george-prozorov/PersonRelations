@@ -18,7 +18,7 @@ internal class ContactTypeConfig : IEntityTypeConfiguration<ContactType>
     builder
       .Property(p => p.CreatedAd)
       .IsRequired()
-      .HasDefaultValue(DateTime.Now);
+      .HasDefaultValue("getdate()");
     builder
       .HasQueryFilter(p => p.IsActive == true);
   }

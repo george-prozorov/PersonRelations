@@ -10,15 +10,15 @@ public class AddPersonRequest : IRequest
 {
   public string? FirstName { get; set; }
   public string? LastName { get; set; }
-  public int? Gender { get; set; }
+  public int? Genderid { get; set; }
   public string? PersonalId { get; set; }
   public DateTime? Birthday { get; set; }
   public int? CityId { get; set; }
 
-  public IEnumerable<Contact>? Contacts { get; set; }
+  public IEnumerable<AddContactRequest>? Contacts { get; set; }
 }
 
-public class Contact
+public class AddContactRequest
 {
   public int? ContactTypeId { get; set; }
   public string? Value { get; set; }
@@ -38,7 +38,9 @@ public class AddPersonRequestHandler : IRequestHandler<AddPersonRequest>
     //BirthDate Validation
     //latinuri da qartuli asoebis narevi aq xom ar gamovitano?
     //piradi nomris lenght xom ar gamoitano aq?
-    throw new Exception("error here");
+    //check cities
+    //check contact types
+    //check GenderId
     var person = _mapper.Map<Person>(request);
     await _unitOfWork.PersonRepository.AddAsync(person);
     await _unitOfWork.SaveChangesAsync();
@@ -55,7 +57,7 @@ public class AddPersonRequestValidator : AbstractValidator<AddPersonRequest>
     RuleFor(x => x.LastName)
       .NotNull()
       .Matches(@"^(?:[A-Za-z]{2,50}|[ა-ჰ]{2,50})$");
-    RuleFor(x => x.Gender)
+    RuleFor(x => x.Genderid)
       .NotNull()
       .GreaterThan(0);
     RuleFor(x => x.PersonalId)
@@ -75,7 +77,7 @@ public class AddPersonRequestValidator : AbstractValidator<AddPersonRequest>
   }
 }
 
-public class ContactValidator : AbstractValidator<Contact>
+public class ContactValidator : AbstractValidator<AddContactRequest>
 {
   public ContactValidator()
   {

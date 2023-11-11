@@ -14,7 +14,7 @@ internal class RelationConfig : IEntityTypeConfiguration<Relation>
       .HasDefaultValue(true);
     builder
       .Property(p => p.CreatedAd)
-      .HasDefaultValue(DateTime.Now);
+      .HasDefaultValue("getdate()");
     builder
       .HasQueryFilter(p => p.IsActive == true);
   }

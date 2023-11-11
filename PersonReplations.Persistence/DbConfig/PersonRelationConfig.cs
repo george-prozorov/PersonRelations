@@ -14,7 +14,7 @@ public class PersonRelationConfig : IEntityTypeConfiguration<PersonRelation>
       .HasDefaultValue(true);
     builder
       .Property(p => p.CreatedAd)
-      .HasDefaultValue(DateTime.Now);
+      .HasDefaultValue("getdate()");
     builder
       .HasOne(p => p.Relation)
       .WithMany(p => p.PersonRelations)

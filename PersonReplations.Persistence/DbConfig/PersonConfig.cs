@@ -23,7 +23,7 @@ public class PersonConfig : IEntityTypeConfiguration<Person>
       .HasDefaultValue(true);
     builder
       .Property(p => p.CreatedAd)
-      .HasDefaultValue(DateTime.Now);
+      .HasDefaultValue("getdate()");
 
 
     builder
