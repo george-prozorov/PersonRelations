@@ -32,7 +32,6 @@ public class ErrorHandling
       _logger.Error(ex, "HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000}",
         context.Request.Method,
         context.Request.Path,
-        errorMessage,
         "(500) Internal Server Error",
         _stopwatch.ElapsedMilliseconds);
       context.Response.StatusCode = 500;
