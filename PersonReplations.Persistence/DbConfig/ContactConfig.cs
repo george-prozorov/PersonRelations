@@ -8,11 +8,15 @@ public class ContactConfig : IEntityTypeConfiguration<Contact>
 {
   public void Configure(EntityTypeBuilder<Contact> builder)
   {
-    builder.Property(p => p.Value)
+    builder
+      .Property(p => p.Value)
       .HasMaxLength(50);
-    builder.Property(p => p.IsActive)
+    builder
+      .Property(p => p.IsActive)
+      .IsRequired()
       .HasDefaultValue(true);
-    builder.Property(p => p.CreatedAd)
+    builder
+      .Property(p => p.CreatedAd)
       .HasDefaultValue(DateTime.Now);
     builder
       .HasQueryFilter(p => p.IsActive == true);

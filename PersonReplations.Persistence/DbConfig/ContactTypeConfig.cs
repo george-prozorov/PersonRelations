@@ -8,12 +8,15 @@ internal class ContactTypeConfig : IEntityTypeConfiguration<ContactType>
 {
   public void Configure(EntityTypeBuilder<ContactType> builder)
   {
-    builder.Property(p => p.DisplayName)
+    builder
+      .Property(p => p.DisplayName)
       .HasMaxLength(50);
-    builder.Property(p => p.IsActive)
+    builder
+      .Property(p => p.IsActive)
       .IsRequired()
       .HasDefaultValue(true);
-    builder.Property(p => p.IsActive)
+    builder
+      .Property(p => p.CreatedAd)
       .IsRequired()
       .HasDefaultValue(DateTime.Now);
     builder

@@ -8,9 +8,12 @@ internal class RelationConfig : IEntityTypeConfiguration<Relation>
 {
   public void Configure(EntityTypeBuilder<Relation> builder)
   {
-    builder.Property(p => p.IsActive)
+    builder
+      .Property(p => p.IsActive)
+      .IsRequired()
       .HasDefaultValue(true);
-    builder.Property(p => p.CreatedAd)
+    builder
+      .Property(p => p.CreatedAd)
       .HasDefaultValue(DateTime.Now);
     builder
       .HasQueryFilter(p => p.IsActive == true);
