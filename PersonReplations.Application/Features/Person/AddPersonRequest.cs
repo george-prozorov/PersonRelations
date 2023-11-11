@@ -33,6 +33,11 @@ public class AddPersonRequestValidator : AbstractValidator<AddPersonRequest>
 {
   public AddPersonRequestValidator()
   {
-    RuleFor(x => x.FirstName).Matches("^(?:[A-Za-z]{2,50}|[ა-ჰ]{2,50})$");
+    RuleFor(x => x.FirstName)
+      .NotNull()
+      .Matches("^(?:[A-Za-z]{2,50}|[ა-ჰ]{2,50})$");
+    RuleFor(x => x.LastName)
+      .NotNull()
+      .Matches("^(?:[A-Za-z]{2,50}|[ა-ჰ]{2,50})$");
   }
 }

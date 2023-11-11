@@ -20,4 +20,11 @@ public class PersonController : ControllerBase
     await _sender.Send(request);
     return Ok();
   }
+
+  [HttpGet]
+  [Route("{perosnId}")]
+  public async Task<IActionResult> Get(int personId)
+  {
+    return Ok();
+  }
 }

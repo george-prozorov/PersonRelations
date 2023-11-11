@@ -1,15 +1,20 @@
+using FluentValidation.AspNetCore;
 using PersonReplations.Application;
 using PersonReplations.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+  options.Filters.Add<ValidationFilter>();
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services
   .ConfigureApplicationServices()
-  .ConfigurePersistenceServices();
+  .ConfigurePersistenceServices(builder.Configuration);
 
 var app = builder.Build();
 
