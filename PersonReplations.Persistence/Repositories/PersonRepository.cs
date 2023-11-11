@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PersonReplations.Application.Interfaces;
+﻿using PersonReplations.Application.Interfaces;
 
 namespace PersonReplations.Persistence.Repositories;
 

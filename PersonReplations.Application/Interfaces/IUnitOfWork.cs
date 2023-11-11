@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace PersonReplations.Application.Interfaces;
 
-namespace PersonReplations.Application.Interfaces
+public interface IUnitOfWork : IDisposable
 {
-  public interface IUnitOfWork : IDisposable
-  {
-    IPersonRepository personRepository { get; }
-    Task SaveChangesAsync();
-  }
+  IPersonRepository personRepository { get; }
+  Task SaveChangesAsync();
 }
