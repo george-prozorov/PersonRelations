@@ -17,5 +17,7 @@ public class PersonRelationConfig : IEntityTypeConfiguration<PersonRelation>
       .WithMany(p => p.PersonRelations)
       .HasForeignKey(p => p.RelationId)
       .OnDelete(DeleteBehavior.Restrict);
+    builder
+      .HasQueryFilter(p => p.IsActive == true);
   }
 }

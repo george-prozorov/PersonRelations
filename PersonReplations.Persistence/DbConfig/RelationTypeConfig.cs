@@ -4,15 +4,17 @@ using PersonReplations.Domain.Entities;
 
 namespace PersonReplations.Persistence.DbConfig;
 
-public class ContactConfig : IEntityTypeConfiguration<Contact>
+internal class RelationTypeConfig : IEntityTypeConfiguration<RelationType>
 {
-  public void Configure(EntityTypeBuilder<Contact> builder)
+  public void Configure(EntityTypeBuilder<RelationType> builder)
   {
-    builder.Property(p => p.Value)
+    builder.Property(p => p.DisplayName)
       .HasMaxLength(50);
     builder.Property(p => p.IsActive)
+      .IsRequired()
       .HasDefaultValue(true);
-    builder.Property(p => p.CreatedAd)
+    builder.Property(p => p.IsActive)
+      .IsRequired()
       .HasDefaultValue(DateTime.Now);
     builder
       .HasQueryFilter(p => p.IsActive == true);

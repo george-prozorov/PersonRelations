@@ -18,6 +18,8 @@ public class PersonConfig : IEntityTypeConfiguration<Person>
       .HasDefaultValue(true);
     builder.Property(p => p.CreatedAd)
       .HasDefaultValue(DateTime.Now);
+    builder
+      .HasQueryFilter(p => p.IsActive == true);
 
     builder.HasIndex(p => p.FirstName);
     builder.HasIndex(p => p.LastName);

@@ -1,4 +1,6 @@
-﻿namespace PersonReplations.Domain.Entities;
+﻿using PersonReplations.Domain.Entities.Abstraction;
+
+namespace PersonReplations.Domain.Entities;
 
 public class PersonRelation : EntityBase
 {

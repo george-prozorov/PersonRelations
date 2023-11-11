@@ -39,5 +39,8 @@ public class AddPersonRequestValidator : AbstractValidator<AddPersonRequest>
     RuleFor(x => x.LastName)
       .NotNull()
       .Matches("^(?:[A-Za-z]{2,50}|[ა-ჰ]{2,50})$");
+    RuleFor(x => x.Gender)
+      .NotNull()
+      .Must(x => x > 0);
   }
 }
