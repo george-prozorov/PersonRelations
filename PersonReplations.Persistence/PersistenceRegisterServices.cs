@@ -15,6 +15,8 @@ public static class PersistenceRegisterServices
                   b => b.MigrationsAssembly(typeof(PersonRelationsDbContext).Assembly.FullName)));
     services.AddScoped<IUnitOfWork, UnitOfWork>();
     services.AddScoped<IPersonRepository, PersonRepository>();
+    services.AddScoped<IReferenceRepository, ReferenceRepository>();
+    services.AddMemoryCache();
     return services;
   }
 }

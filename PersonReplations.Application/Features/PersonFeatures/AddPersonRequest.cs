@@ -5,6 +5,7 @@ using Microsoft.Extensions.Localization;
 using PersonReplations.Application.Interfaces;
 using PersonReplations.Application.Resources.Localization;
 using PersonReplations.Domain.Entities;
+using PersonReplations.Domain.Entities.Abstraction;
 
 namespace PersonReplations.Application.Features.PersonFeatures;
 
@@ -51,9 +52,9 @@ public class AddPersonRequestHandler : IRequestHandler<AddPersonRequest>
 
 public class AddPersonRequestValidator : AbstractValidator<AddPersonRequest>
 {
-
-  public AddPersonRequestValidator(IStringLocalizer<Messages> localizer)
+  public AddPersonRequestValidator(IStringLocalizer<Messages> localizer, IReferenceRepository repository)
   {
+
     RuleFor(x => x.FirstName)
       .NotNull()
       .MinimumLength(2)
@@ -72,7 +73,10 @@ public class AddPersonRequestValidator : AbstractValidator<AddPersonRequest>
       .WithMessage(x => string.Format(localizer["NotTogether"], nameof(x.LastName)));
     RuleFor(x => x.Genderid)
       .NotNull()
-      .GreaterThan(0);
+      .GreaterThan(0)
+      .MustAsync(async (id, canncelationToken) =>
+        await repository.ValidateReference<Gender>((int)id!, canncelationToken)
+      );
 
     RuleFor(x => x.PersonalId)
       .NotNull()
@@ -82,22 +86,28 @@ public class AddPersonRequestValidator : AbstractValidator<AddPersonRequest>
       .NotNull();
     RuleFor(x => x.CityId)
       .NotNull()
-      .GreaterThan(0);
+      .GreaterThan(0)
+      .MustAsync(async (id, canncelationToken) =>
+        await repository.ValidateReference<City>((int)id!, canncelationToken)
+      );
     RuleFor(x => x.Contacts)
       .NotNull();
 
     RuleForEach(x => x.Contacts)
-      .SetValidator(new ContactValidator());
+      .SetValidator(new ContactValidator(repository));
   }
 }
 
 public class ContactValidator : AbstractValidator<AddContactRequest>
 {
-  public ContactValidator()
+  public ContactValidator(IReferenceRepository repository)
   {
     RuleFor(x => x.ContactTypeId)
      .NotNull()
-     .GreaterThan(0);
+     .GreaterThan(0)
+     .MustAsync(async (id, canncelationToken) =>
+      await repository.ValidateReference<ContactType>((int)id!, canncelationToken)
+    ); ;
     RuleFor(x => x.Value)
       .NotNull()
       .MinimumLength(4)
