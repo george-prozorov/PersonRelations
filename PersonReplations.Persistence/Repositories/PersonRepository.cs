@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PersonReplations.Application.Features.PersonsFeatures;
 using PersonReplations.Application.Interfaces;
 using PersonReplations.Domain.Entities;
 
@@ -56,5 +57,26 @@ public class PersonRepository : IPersonRepository
       .ThenInclude(x => x!.RelationType);
     var cmd = query.ToQueryString();
     return query.FirstOrDefaultAsync(x => x.Id == personId);
+  }
+
+  public async Task<IEnumerable<Person>> GetPersons(GetPersonsRequest request)
+  {
+    var query = _db.Persons
+      .Include(x => x.Gender)
+      .Include(x => x.City)
+      .Include(x => x.PersonRelations)
+      .ThenInclude(x => x.Relation)
+      .ThenInclude(x => x!.PersonRelations)
+      .Where(x =>
+        (string.IsNullOrEmpty(request.FirstName) || EF.Functions.Like(x.FirstName, "%" + request.FirstName + "%")) &&
+        (string.IsNullOrEmpty(request.LastName) || EF.Functions.Like(x.LastName, "%" + request.LastName + "%")) &&
+        (string.IsNullOrEmpty(request.PersonalId) || EF.Functions.Like(x.PersonalId, "%" + request.PersonalId + "%")) &&
+        (!request.GenderId.HasValue || x.GenderId == request.GenderId) &&
+        (!request.CityId.HasValue || x.CityId == request.CityId) &&
+        (!request.RelativeId.HasValue ||
+        x.PersonRelations.Any(y => y.Relation!.PersonRelations
+            .Any(z => z.PersonId != x.Id && z.PersonId == request.RelativeId)))
+      );
+    return await query.ToListAsync();
   }
 }
