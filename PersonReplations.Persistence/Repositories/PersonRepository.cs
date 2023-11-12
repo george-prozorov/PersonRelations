@@ -22,7 +22,15 @@ public class PersonRepository : IPersonRepository
     return await _db.Set<T>().FindAsync(id);
   }
 
-  public Task<Person> GetUserForUpdate(int id)
+  public async Task<List<Relation>> GetPerosnRelations(int PersonId)
+  {
+    return await _db.Relations
+      .Include(x => x.PersonRelations)
+      .Where(x => x.PersonRelations.Any(x => x.PersonId == PersonId))
+      .ToListAsync();
+  }
+
+  public Task<Person> GetPersonForUpdate(int id)
   {
     return _db.Persons
       .Include(x => x.Contacts)

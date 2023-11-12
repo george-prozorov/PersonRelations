@@ -7,4 +7,13 @@ public class Relation : EntityBase
   public int RelationTypeId { get; set; }
   public RelationType? RelationType { get; set; }
   public IEnumerable<PersonRelation> PersonRelations { get; set; } = new List<PersonRelation>();
+
+  public void Deactivate()
+  {
+    IsActive = false;
+    foreach (PersonRelation relation in PersonRelations)
+    {
+      relation.IsActive = false;
+    }
+  }
 }

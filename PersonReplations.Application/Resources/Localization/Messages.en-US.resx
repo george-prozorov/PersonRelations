@@ -129,4 +129,7 @@
   <data name="NotTogether" xml:space="preserve">
     <value>'{0}' it`s not allowed to use Latin and Georgian characters simultaneusly.</value>
   </data>
+  <data name="SelfRelation" xml:space="preserve">
+    <value>Creating Self Relations Restricted</value>
+  </data>
 </root>

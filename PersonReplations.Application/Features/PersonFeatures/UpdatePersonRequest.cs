@@ -25,7 +25,7 @@ internal class UpdatePersonRequestHandler : IRequestHandler<UpdatePersonRequest>
   }
   public async Task Handle(UpdatePersonRequest request, CancellationToken cancellationToken)
   {
-    var person = await _unitOfWork.PersonRepository.GetUserForUpdate((int)request.PersonId!);
+    var person = await _unitOfWork.PersonRepository.GetPersonForUpdate((int)request.PersonId!);
     person!.Update(request.FirstName,
                    request.LastName,
                    request.Genderid,

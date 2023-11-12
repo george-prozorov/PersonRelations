@@ -51,7 +51,7 @@ public class Person : EntityBase
     Contacts = newContacts;
   }
 
-  public void UpdateFile(string fileName)
+  public void UpdateImagePath(string fileName)
   {
     ImagePath = fileName;
   }

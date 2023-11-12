@@ -129,4 +129,7 @@
   <data name="NotTogether" xml:space="preserve">
     <value>'{0}' დაუშვებელია ქართული და ლათინური ასოების ერთდროულად გამოყენება.</value>
   </data>
+  <data name="SelfRelation" xml:space="preserve">
+    <value>საკუთარი თავთან დაკავშირება აკრძალულია</value>
+  </data>
 </root>

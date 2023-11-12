@@ -95,5 +95,14 @@ namespace PersonReplations.Application.Resources.Localization {
                 return ResourceManager.GetString("NotTogether", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to საკუთარი თავთან დაკავშირება აკრძალულია.
+        /// </summary>
+        public static string SelfRelation {
+            get {
+                return ResourceManager.GetString("SelfRelation", resourceCulture);
+            }
+        }
     }
 }

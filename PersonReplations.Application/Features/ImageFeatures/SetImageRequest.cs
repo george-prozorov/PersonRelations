@@ -10,7 +10,7 @@ using System.Data;
 
 namespace PersonReplations.Application.Features.ImageFeatures;
 
-public record SetImageRequest(IFormFile File, int personId) : IRequest;
+public record SetImageRequest(IFormFile File, int PersonId) : IRequest;
 
 public class SetImageRequestHandler : IRequestHandler<SetImageRequest>
 {
@@ -24,9 +24,9 @@ public class SetImageRequestHandler : IRequestHandler<SetImageRequest>
 
   async Task IRequestHandler<SetImageRequest>.Handle(SetImageRequest request, CancellationToken cancellationToken)
   {
-    var fileName = await _fileServiceRepository.SaveFileAsync(request.File, request.personId);
-    var person = await _unitOfWork.PersonRepository.GetUserForUpdate(request.personId);
-    person.UpdateFile(fileName);
+    var fileName = await _fileServiceRepository.SaveFileAsync(request.File, request.PersonId);
+    var person = await _unitOfWork.PersonRepository.GetPersonForUpdate(request.PersonId);
+    person.UpdateImagePath(fileName);
     await _unitOfWork.SaveChangesAsync();
   }
 }
@@ -42,7 +42,7 @@ public class SetImageRequestValidator : AbstractValidator<SetImageRequest>
     RuleFor(x => x.File)
       .Must(x => x.IsImage())
       .WithMessage(localizer["FileType"]);
-    RuleFor(x => x.personId)
+    RuleFor(x => x.PersonId)
       .NotNull()
       .GreaterThan(0)
       .MustAsync(async (id, cancelationToken) => await repository.ValidateReference<Person>(id, cancelationToken));

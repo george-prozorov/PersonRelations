@@ -26,7 +26,11 @@ public class ReferenceRepository : IReferenceRepository
   }
   public async Task<bool> ValidateReference<T>(int? id, CancellationToken canncelationToken) where T : EntityBase
   {
-    if(!id.HasValue) return false;
+    if (!id.HasValue) return false;
+    if (typeof(T).Name == "Person")
+    {
+      return await _db.Persons.AnyAsync(x => x.Id == id, canncelationToken);
+    }
     var refs = await GetReferences<T>(canncelationToken);
     return refs.Any(x => x.Id == id);
   }
