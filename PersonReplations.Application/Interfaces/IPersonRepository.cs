@@ -8,4 +8,5 @@ public interface IPersonRepository
   Task<T?> GetByIdAsync<T>(int id) where T : class;
   Task<Person> GetPersonForUpdate(int id);
   Task<List<Relation>> GetPerosnRelations(int PersonId);
+  Task<Person?> GetPersonFullInfo(int personId);
 }

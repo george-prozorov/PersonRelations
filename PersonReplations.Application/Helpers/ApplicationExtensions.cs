@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using PersonReplations.Domain.Entities;
 
 namespace PersonReplations.Application.Helpers;
 
@@ -28,5 +29,9 @@ public static class ApplicationExtensions
     {
       return false;
     }
+  }
+  public static string GetPersonName(this Person person)
+  {
+    return string.Concat(person.FirstName, " ", person.LastName);
   }
 }

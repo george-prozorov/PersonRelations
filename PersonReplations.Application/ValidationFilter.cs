@@ -16,7 +16,7 @@ public class ValidationFilter : IAsyncActionFilter
   public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
   {
     var request = context.ActionArguments.FirstOrDefault().Value;
-    if (request == null) return;
+    if (request == null) { await next(); return; }
 
     var requestType = request.GetType();
     var validatorType = typeof(IValidator<>).MakeGenericType(requestType);
@@ -24,7 +24,7 @@ public class ValidationFilter : IAsyncActionFilter
     IValidator validator;
     if (service is IValidator validatorService)
       validator = validatorService;
-    else return;
+    else { await next(); return; }
 
     var contextType = typeof(ValidationContext<>).MakeGenericType(requestType);
     var validationContext = Activator.CreateInstance(contextType, request);
@@ -37,6 +37,6 @@ public class ValidationFilter : IAsyncActionFilter
         validationResult.Errors.Select(e => e.ErrorMessage));
     }
     else
-    await next();
+      await next();
   }
 }

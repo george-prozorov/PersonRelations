@@ -9,6 +9,7 @@ namespace PersonReplations.Application.Interfaces
 {
   public interface IFileServiceRepository
   {
+    Task<byte[]> GetFile(int personId, string fileName);
     Task<string> SaveFileAsync(IFormFile file, int personId);
   }
 }

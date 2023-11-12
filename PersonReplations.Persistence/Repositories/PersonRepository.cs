@@ -39,4 +39,22 @@ public class PersonRepository : IPersonRepository
       .ThenInclude(x => x!.PersonRelations)
       .FirstAsync(x => x.Id == id);
   }
+
+  public Task<Person?> GetPersonFullInfo(int personId)
+  {
+    var query = _db.Persons
+      .Include(x => x.Gender)
+      .Include(x => x.City)
+      .Include(x => x.Contacts)
+      .ThenInclude(x => x.ContactType)
+      .Include(x => x.PersonRelations)
+      .ThenInclude(x => x.Relation)
+      .ThenInclude(x => x!.PersonRelations)
+      .ThenInclude(x => x.Person)
+      .Include(x => x.PersonRelations)
+      .ThenInclude(x => x.Relation)
+      .ThenInclude(x => x!.RelationType);
+    var cmd = query.ToQueryString();
+    return query.FirstOrDefaultAsync(x => x.Id == personId);
+  }
 }

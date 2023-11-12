@@ -24,7 +24,7 @@ public class PersonController : ControllerBase
   }
 
   [HttpGet]
-  [Route("{perosnId}")]
+  [Route("{personId}")]
   public async Task<IActionResult> Get(int personId)
   {
     var result = await _sender.Send(new GetPersonRequest(personId));

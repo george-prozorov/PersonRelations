@@ -13,6 +13,13 @@ public class FileServiceRepository : IFileServiceRepository
   {
     _appSettings = options.Value;
   }
+
+  public Task<byte[]> GetFile(int personId, string fileName)
+  {
+    var path = Path.Combine(_appSettings.ImageFolder, personId.ToString(), fileName);
+    return File.ReadAllBytesAsync(path);
+  }
+
   public async Task<string> SaveFileAsync(IFormFile file, int personId)
   {
 
