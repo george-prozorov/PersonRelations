@@ -13,6 +13,8 @@ builder.Services.AddControllers(options =>
   options.Filters.Add<ValidationFilter>();
 });
 
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection(nameof(AppSettings)));
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<Stopwatch>();

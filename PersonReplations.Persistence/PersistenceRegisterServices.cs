@@ -16,6 +16,7 @@ public static class PersistenceRegisterServices
     services.AddScoped<IUnitOfWork, UnitOfWork>();
     services.AddScoped<IPersonRepository, PersonRepository>();
     services.AddScoped<IReferenceRepository, ReferenceRepository>();
+    services.AddScoped<IFileServiceRepository, FileServiceRepository>();
     services.AddMemoryCache();
     return services;
   }

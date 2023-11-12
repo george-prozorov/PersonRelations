@@ -50,6 +50,12 @@ public class Person : EntityBase
     }
     Contacts = newContacts;
   }
+
+  public void UpdateFile(string fileName)
+  {
+    ImagePath = fileName;
+  }
+
   public class ContactComparer : IEqualityComparer<Contact>
   {
     public bool Equals(Contact? x, Contact? y)

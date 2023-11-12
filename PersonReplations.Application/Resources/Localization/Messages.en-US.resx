@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="FileType" xml:space="preserve">
+    <value>Only jpg, jpeg and png file Types are allowed</value>
+  </data>
   <data name="NotAllowedCharacters" xml:space="preserve">
     <value>'{0}'-Only Latin or Georgina charactesrs are allowed.</value>
   </data>

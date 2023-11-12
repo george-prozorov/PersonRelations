@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="FileType" xml:space="preserve">
+    <value>დასაშვებია მხოლოდ jpg, jpeg, png ტიპის ფაილები</value>
+  </data>
   <data name="NotAllowedCharacters" xml:space="preserve">
     <value>'{0}' ველში დასაშვებია მხოლოდ ლათინური ან ქართული ასოების გამოყენება</value>
   </data>
