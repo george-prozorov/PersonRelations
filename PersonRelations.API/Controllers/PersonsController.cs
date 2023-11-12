@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using PersonReplations.Application.Features.PersonFeatures;
 using PersonReplations.Application.Features.PersonsFeatures;
 
 namespace PersonRelations.API.Controllers;
@@ -18,5 +19,11 @@ public class PersonsController : ControllerBase
   {
     var result = await _sender.Send(request);
     return Ok(result);
+  }
+  [HttpPost]
+  public async Task<IActionResult> GetStatistiics(GetStatisticsRequest request)
+  {
+    var resul = _sender.Send(request);
+    return Ok(resul);
   }
 }
