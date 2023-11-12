@@ -35,6 +35,8 @@ public class PersonRepository : IPersonRepository
     return _db.Persons
       .Include(x => x.Contacts)
       .Include(x => x.PersonRelations)
+      .ThenInclude(x => x.Relation)
+      .ThenInclude(x => x!.PersonRelations)
       .FirstAsync(x => x.Id == id);
   }
 }

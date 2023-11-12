@@ -79,6 +79,15 @@ namespace PersonReplations.Application.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to შესაბამისი პიროვნება არ მოიძებნა.
+        /// </summary>
+        public static string NotFound {
+            get {
+                return ResourceManager.GetString("NotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; დაუშვებელია არასრულწლოვანთა რეგისტრაცია..
         /// </summary>
         public static string NotMature {

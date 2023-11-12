@@ -23,6 +23,14 @@ public class PersonController : ControllerBase
     return Ok();
   }
 
+  [HttpGet]
+  [Route("{perosnId}")]
+  public async Task<IActionResult> Get(int personId)
+  {
+    var result = await _sender.Send(new GetPersonRequest(personId));
+    return Ok(result);
+  }
+
   [HttpPost]
   public async Task<IActionResult> Update(UpdatePersonRequest request)
   {
@@ -30,11 +38,10 @@ public class PersonController : ControllerBase
     return Ok();
   }
 
-  [HttpGet]
-  [Route("{perosnId}")]
-  public async Task<IActionResult> Get(int personId)
+  [HttpPost]
+  public async Task<IActionResult> Delete(DeletePersonRequest request)
   {
-    await _sender.Send(personId);
+    await _sender.Send(request);
     return Ok();
   }
 }
