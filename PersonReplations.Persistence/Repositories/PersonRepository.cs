@@ -2,6 +2,7 @@
 using PersonReplations.Application.Features.PersonsFeatures;
 using PersonReplations.Application.Interfaces;
 using PersonReplations.Domain.Entities;
+using PersonReplations.Persistence.Helpers;
 
 namespace PersonReplations.Persistence.Repositories;
 
@@ -77,6 +78,6 @@ public class PersonRepository : IPersonRepository
         x.PersonRelations.Any(y => y.Relation!.PersonRelations
             .Any(z => z.PersonId != x.Id && z.PersonId == request.RelativeId)))
       );
-    return await query.ToListAsync();
+    return await query.Pagination(request.PageNumber!.Value, request.PageSize!.Value).ToListAsync();
   }
 }
