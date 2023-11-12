@@ -120,6 +120,9 @@
   <data name="NotAllowedCharacters" xml:space="preserve">
     <value>'{0}' ველში დასაშვებია მხოლოდ ლათინური ან ქართული ასოების გამოყენება</value>
   </data>
+  <data name="NotMature" xml:space="preserve">
+    <value>'{0}' დაუშვებელია არასრულწლოვანთა რეგისტრაცია.</value>
+  </data>
   <data name="NotTogether" xml:space="preserve">
     <value>'{0}' დაუშვებელია ქართული და ლათინური ასოების ერთდროულად გამოყენება.</value>
   </data>

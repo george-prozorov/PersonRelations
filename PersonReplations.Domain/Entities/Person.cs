@@ -1,4 +1,6 @@
 ﻿using PersonReplations.Domain.Entities.Abstraction;
+using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace PersonReplations.Domain.Entities;
 
@@ -14,6 +16,52 @@ public class Person : EntityBase
   public City? City { get; set; }
   public string? ImagePath { get; set; }
 
-  public IEnumerable<Contact> Contacts { get; set; } = Enumerable.Empty<Contact>();
-  public IEnumerable<PersonRelation> PersonRelations { get; set; } = Enumerable.Empty<PersonRelation>();
+  public IEnumerable<Contact> Contacts { get; set; } = new List<Contact>();
+  public IEnumerable<PersonRelation> PersonRelations { get; set; } = new List<PersonRelation>();
+
+  public void Update(string? firstName, string? lastName, int? genderid, string? personalId, DateTime? birthDate, int? cityId)
+  {
+    if (!string.IsNullOrEmpty(firstName))
+      FirstName = firstName;
+    if (!string.IsNullOrEmpty(lastName))
+      LastName = lastName;
+    if (!string.IsNullOrEmpty(personalId))
+      PersonalId = personalId;
+    if (genderid.HasValue)
+      GenderId = genderid.Value;
+    if (cityId.HasValue)
+      CityId = cityId.Value;
+    if (birthDate.HasValue)
+      BirthDate = birthDate.Value;
+  }
+
+  public void UpdateContacts(IEnumerable<Contact> contacts)
+  {
+    var newContacts = Contacts.ToList();
+    foreach (var contact in newContacts)
+    {
+      if (!contacts.Contains(contact, new ContactComparer()))
+        contact.IsActive = false;
+    }
+    foreach (var contact in contacts)
+    {
+      if (!Contacts.Contains(contact, new ContactComparer()))
+        newContacts.Add(contact);
+    }
+    Contacts = newContacts;
+  }
+  public class ContactComparer : IEqualityComparer<Contact>
+  {
+    public bool Equals(Contact? x, Contact? y)
+    {
+      if (x is null || y is null)
+        return false;
+      return x.ContactTypeId == y.ContactTypeId && x.Value == y.Value;
+    }
+
+    public int GetHashCode([DisallowNull] Contact obj)
+    {
+      throw new NotImplementedException();
+    }
+  }
 }

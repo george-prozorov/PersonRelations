@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using PersonReplations.Application.Features.PersonFeatures;
 
@@ -16,6 +17,13 @@ public class PersonController : ControllerBase
 
   [HttpPost]
   public async Task<IActionResult> Add(AddPersonRequest request)
+  {
+    await _sender.Send(request);
+    return Ok();
+  }
+
+  [HttpPost]
+  public async Task<IActionResult> Update(UpdatePersonRequest request)
   {
     await _sender.Send(request);
     return Ok();

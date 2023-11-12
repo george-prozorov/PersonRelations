@@ -36,5 +36,7 @@ public class ValidationFilter : IAsyncActionFilter
       context.Result = new BadRequestObjectResult(
         validationResult.Errors.Select(e => e.ErrorMessage));
     }
+    else
+    await next();
   }
 }

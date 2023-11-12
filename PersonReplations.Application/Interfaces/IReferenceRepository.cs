@@ -10,6 +10,6 @@ namespace PersonReplations.Application.Interfaces
   public interface IReferenceRepository
   {
     Task<IEnumerable<T>> GetReferences<T>(CancellationToken canncelationToken) where T : EntityBase;
-    Task<bool> ValidateReference<T>(int id, CancellationToken canncelationToken) where T : EntityBase;
+    Task<bool> ValidateReference<T>(int? id, CancellationToken canncelationToken) where T : EntityBase;
   }
 }

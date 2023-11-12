@@ -5,7 +5,7 @@ using Microsoft.Extensions.Localization;
 using PersonReplations.Application.Interfaces;
 using PersonReplations.Application.Resources.Localization;
 using PersonReplations.Domain.Entities;
-using PersonReplations.Domain.Entities.Abstraction;
+using PersonReplations.Application.Helpers;
 
 namespace PersonReplations.Application.Features.PersonFeatures;
 
@@ -15,7 +15,7 @@ public class AddPersonRequest : IRequest
   public string? LastName { get; set; }
   public int? Genderid { get; set; }
   public string? PersonalId { get; set; }
-  public DateTime? Birthday { get; set; }
+  public DateTime? BirthDate { get; set; }
   public int? CityId { get; set; }
 
   public IEnumerable<AddContactRequest>? Contacts { get; set; }
@@ -38,12 +38,6 @@ public class AddPersonRequestHandler : IRequestHandler<AddPersonRequest>
   }
   public async Task Handle(AddPersonRequest request, CancellationToken cancellationToken)
   {
-    //BirthDate Validation
-    //latinuri da qartuli asoebis narevi aq xom ar gamovitano?
-    //piradi nomris lenght xom ar gamoitano aq?
-    //check cities
-    //check contact types
-    //check GenderId
     var person = _mapper.Map<Person>(request);
     await _unitOfWork.PersonRepository.AddAsync(person);
     await _unitOfWork.SaveChangesAsync();
@@ -75,20 +69,21 @@ public class AddPersonRequestValidator : AbstractValidator<AddPersonRequest>
       .NotNull()
       .GreaterThan(0)
       .MustAsync(async (id, canncelationToken) =>
-        await repository.ValidateReference<Gender>((int)id!, canncelationToken)
+        await repository.ValidateReference<Gender>(id, canncelationToken)
       );
-
+    RuleFor(x => x.BirthDate)
+      .NotNull()
+      .Must(x => x.IsMature())
+      .WithMessage(x => string.Format(localizer["NotMature"], nameof(x.BirthDate)));
     RuleFor(x => x.PersonalId)
       .NotNull()
       .Length(11)
       .Matches(@"^\d{11}$");
-    RuleFor(x => x.Birthday)
-      .NotNull();
     RuleFor(x => x.CityId)
       .NotNull()
       .GreaterThan(0)
       .MustAsync(async (id, canncelationToken) =>
-        await repository.ValidateReference<City>((int)id!, canncelationToken)
+        await repository.ValidateReference<City>(id, canncelationToken)
       );
     RuleFor(x => x.Contacts)
       .NotNull();
@@ -106,7 +101,7 @@ public class ContactValidator : AbstractValidator<AddContactRequest>
      .NotNull()
      .GreaterThan(0)
      .MustAsync(async (id, canncelationToken) =>
-      await repository.ValidateReference<ContactType>((int)id!, canncelationToken)
+      await repository.ValidateReference<ContactType>(id, canncelationToken)
     ); ;
     RuleFor(x => x.Value)
       .NotNull()

@@ -120,6 +120,9 @@
   <data name="NotAllowedCharacters" xml:space="preserve">
     <value>'{0}'-Only Latin or Georgina charactesrs are allowed.</value>
   </data>
+  <data name="NotMature" xml:space="preserve">
+    <value>'{0}' Registration of person under 18 is prohibited.</value>
+  </data>
   <data name="NotTogether" xml:space="preserve">
     <value>'{0}' it`s not allowed to use Latin and Georgian characters simultaneusly.</value>
   </data>

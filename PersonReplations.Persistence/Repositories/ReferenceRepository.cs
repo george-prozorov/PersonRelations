@@ -24,8 +24,9 @@ public class ReferenceRepository : IReferenceRepository
     _memoryCache.Set(typeof(T).Name, result, TimeSpan.FromHours(3));
     return result;
   }
-  public async Task<bool> ValidateReference<T>(int id, CancellationToken canncelationToken) where T : EntityBase
+  public async Task<bool> ValidateReference<T>(int? id, CancellationToken canncelationToken) where T : EntityBase
   {
+    if(!id.HasValue) return false;
     var refs = await GetReferences<T>(canncelationToken);
     return refs.Any(x => x.Id == id);
   }

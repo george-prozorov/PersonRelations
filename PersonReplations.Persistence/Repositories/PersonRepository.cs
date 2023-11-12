@@ -1,4 +1,6 @@
-﻿using PersonReplations.Application.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using PersonReplations.Application.Interfaces;
+using PersonReplations.Domain.Entities;
 
 namespace PersonReplations.Persistence.Repositories;
 
@@ -18,5 +20,13 @@ public class PersonRepository : IPersonRepository
   public async Task<T?> GetByIdAsync<T>(int id) where T : class
   {
     return await _db.Set<T>().FindAsync(id);
+  }
+
+  public Task<Person> GetUserForUpdate(int id)
+  {
+    return _db.Persons
+      .Include(x => x.Contacts)
+      .Include(x => x.PersonRelations)
+      .FirstAsync(x => x.Id == id);
   }
 }
