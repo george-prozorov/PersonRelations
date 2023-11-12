@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using MediatR;
+using Microsoft.Extensions.Localization;
 using PersonReplations.Application.Interfaces;
+using PersonReplations.Application.Resources.Localization;
 using PersonReplations.Domain.Entities;
 
 namespace PersonReplations.Application.Features.PersonFeatures;
@@ -49,17 +51,29 @@ public class AddPersonRequestHandler : IRequestHandler<AddPersonRequest>
 
 public class AddPersonRequestValidator : AbstractValidator<AddPersonRequest>
 {
-  public AddPersonRequestValidator()
+
+  public AddPersonRequestValidator(IStringLocalizer<Messages> localizer)
   {
     RuleFor(x => x.FirstName)
       .NotNull()
-      .Matches(@"^(?:[A-Za-z]{2,50}|[ა-ჰ]{2,50})$");
+      .MinimumLength(2)
+      .MaximumLength(50)
+      .Matches(@"^[A-Za-zა-ჰ]+$")
+      .WithMessage(x => string.Format(localizer["NotAllowedCharacters"], nameof(x.FirstName)))
+      .Matches(@"^(?:[A-Za-z]+|[ა-ჰ]+)$")
+      .WithMessage(x => string.Format(localizer["NotTogether"], nameof(x.FirstName)));
     RuleFor(x => x.LastName)
       .NotNull()
-      .Matches(@"^(?:[A-Za-z]{2,50}|[ა-ჰ]{2,50})$");
+      .MinimumLength(2)
+      .MaximumLength(50)
+      .Matches(@"^[A-Za-zა-ჰ]+$")
+      .WithMessage(x => string.Format(localizer["NotAllowedCharacters"], nameof(x.LastName)))
+      .Matches(@"^(?:[A-Za-z]+|[ა-ჰ]+)$")
+      .WithMessage(x => string.Format(localizer["NotTogether"], nameof(x.LastName)));
     RuleFor(x => x.Genderid)
       .NotNull()
       .GreaterThan(0);
+
     RuleFor(x => x.PersonalId)
       .NotNull()
       .Length(11)

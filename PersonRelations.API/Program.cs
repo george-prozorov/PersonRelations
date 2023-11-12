@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Options;
 using PersonRelations.API.Middlewares;
 using PersonReplations.Application;
 using PersonReplations.Persistence;
@@ -31,6 +32,10 @@ if (app.Environment.IsDevelopment())
   app.UseSwagger();
   app.UseSwaggerUI();
 }
+
+var localizeOptions = app.Services.GetService<IOptions<RequestLocalizationOptions>>();
+
+app.UseRequestLocalization(localizeOptions!.Value);
 
 app.UseHttpsRedirection();
 
