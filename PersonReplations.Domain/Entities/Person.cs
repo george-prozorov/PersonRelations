@@ -19,11 +19,11 @@ public class Person : EntityBase
   public IEnumerable<Contact> Contacts { get; set; } = new List<Contact>();
   public IEnumerable<PersonRelation> PersonRelations { get; set; } = new List<PersonRelation>();
 
-  public void Deactivate()
+  public override void Deactivate()
   {
     IsActive = false;
     foreach (var contact in Contacts)
-      contact.IsActive = false;
+      contact.Deactivate();
     var relations = PersonRelations.Select(x => x.Relation);
     foreach (var relation in relations)
       relation!.Deactivate();

@@ -2,7 +2,12 @@
 
 public abstract class EntityBase
 {
-    public int Id { get; set; }
-    public bool? IsActive { get; set; }
-    public DateTime CreatedAd { get; set; }
+  public int Id { get; set; }
+  public bool? IsActive { get; set; }
+  public DateTime CreatedAd { get; set; }
+
+  public virtual void Deactivate()
+  {
+    IsActive = false;
+  }
 }

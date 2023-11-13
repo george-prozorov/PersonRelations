@@ -8,18 +8,9 @@ using PersonReplations.Domain.Entities;
 
 namespace PersonReplations.Application.Features.PersonRelations;
 
-public class UpdatePersonRelations : IRequest
-{
-  public int? PersonId { get; set; }
-  public IEnumerable<Relative>? Relatives { get; set; }
-}
+public record UpdatePersonRelations(int? PersonId, IEnumerable<Relative>? Relatives) : IRequest;
 
-
-public class Relative
-{
-  public int? RelationTypeId { get; set; }
-  public int? RelativePersonId { get; set; }
-}
+public record Relative(int? RelationTypeId, int? RelativePersonId);
 
 public class UpdatePersonRelationsHandler : IRequestHandler<UpdatePersonRelations>
 {
@@ -57,10 +48,11 @@ public class UpdatePersonRelationsHandler : IRequestHandler<UpdatePersonRelation
   {
     foreach (var relative in request.Relatives!)
     {
-      if (!relations.Where(x =>
-      x.RelationTypeId == relative.RelationTypeId &&
-      x.PersonRelations.Any(x => x.PersonId == relative.RelativePersonId)
-      ).Any())
+      if (!relations
+            .Where(x =>
+              x.RelationTypeId == relative.RelationTypeId &&
+              x.PersonRelations.Any(x => x.PersonId == relative.RelativePersonId)
+             ).Any())
       {
         await _unitOfWork.PersonRepository.AddAsync(new Relation()
         {

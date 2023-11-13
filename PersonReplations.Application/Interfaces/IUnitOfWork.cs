@@ -1,6 +1,6 @@
 ﻿namespace PersonReplations.Application.Interfaces;
 
-public interface IUnitOfWork : IDisposable
+public interface IUnitOfWork
 {
   IPersonRepository PersonRepository { get; }
   Task SaveChangesAsync();

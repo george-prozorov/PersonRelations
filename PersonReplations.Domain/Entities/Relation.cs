@@ -8,12 +8,12 @@ public class Relation : EntityBase
   public RelationType? RelationType { get; set; }
   public IEnumerable<PersonRelation> PersonRelations { get; set; } = new List<PersonRelation>();
 
-  public void Deactivate()
+  public override void Deactivate()
   {
     IsActive = false;
     foreach (PersonRelation relation in PersonRelations)
     {
-      relation.IsActive = false;
+      relation.Deactivate();
     }
   }
 }

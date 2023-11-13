@@ -14,13 +14,13 @@ public class FileServiceRepository : IFileServiceRepository
     _appSettings = options.Value;
   }
 
-  public Task<byte[]> GetFile(int personId, string fileName)
+  public Task<byte[]> GetFile(int personId, string fileName, CancellationToken cancellationToken = default)
   {
     var path = Path.Combine(_appSettings.ImageFolder, personId.ToString(), fileName);
-    return File.ReadAllBytesAsync(path);
+    return File.ReadAllBytesAsync(path, cancellationToken);
   }
 
-  public async Task<string> SaveFileAsync(IFormFile file, int personId)
+  public async Task<string> SaveFileAsync(IFormFile file, int personId, CancellationToken cancellationToken = default)
   {
 
     var fileName = Guid.NewGuid().ToString() + file.ContentType switch
@@ -38,7 +38,7 @@ public class FileServiceRepository : IFileServiceRepository
     string path = Path.Combine(folderPath, fileName);
     using (var stream = new FileStream(path, FileMode.Create))
     {
-      await file.CopyToAsync(stream);
+      await file.CopyToAsync(stream, cancellationToken);
     }
     return fileName;
   }

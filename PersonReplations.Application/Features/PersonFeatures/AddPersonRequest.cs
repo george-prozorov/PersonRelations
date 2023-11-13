@@ -13,7 +13,7 @@ public class AddPersonRequest : IRequest
 {
   public string? FirstName { get; set; }
   public string? LastName { get; set; }
-  public int? Genderid { get; set; }
+  public int? GenderId { get; set; }
   public string? PersonalId { get; set; }
   public DateTime? BirthDate { get; set; }
   public int? CityId { get; set; }
@@ -65,7 +65,7 @@ public class AddPersonRequestValidator : AbstractValidator<AddPersonRequest>
       .WithMessage(x => string.Format(localizer["NotAllowedCharacters"], nameof(x.LastName)))
       .Matches(@"^(?:[A-Za-z]+|[ა-ჰ]+)$")
       .WithMessage(x => string.Format(localizer["NotTogether"], nameof(x.LastName)));
-    RuleFor(x => x.Genderid)
+    RuleFor(x => x.GenderId)
       .NotNull()
       .GreaterThan(0)
       .MustAsync(async (id, canncelationToken) =>

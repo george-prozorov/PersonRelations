@@ -15,7 +15,7 @@ public class ReferenceRepository : IReferenceRepository
     _db = db;
     _memoryCache = memoryCache;
   }
-  public async Task<IEnumerable<T>> GetReferences<T>(CancellationToken canncelationToken) where T : EntityBase
+  public async Task<IEnumerable<T>> GetReferences<T>(CancellationToken canncelationToken = default) where T : EntityBase
   {
     var memResult = _memoryCache.Get<IEnumerable<T>>(typeof(T).Name);
     if (memResult != null)
@@ -24,7 +24,7 @@ public class ReferenceRepository : IReferenceRepository
     _memoryCache.Set(typeof(T).Name, result, TimeSpan.FromHours(3));
     return result;
   }
-  public async Task<bool> ValidateReference<T>(int? id, CancellationToken canncelationToken) where T : EntityBase
+  public async Task<bool> ValidateReference<T>(int? id, CancellationToken canncelationToken = default) where T : EntityBase
   {
     if (!id.HasValue) return false;
     if (typeof(T).Name == "Person")

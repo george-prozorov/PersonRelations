@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using FluentValidation;
+﻿using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using PersonReplations.Application.Features.PersonsFeatures.Models;
@@ -25,14 +24,11 @@ public class GetPersonsRequest : Pagination, IRequest<GetPersonsResponse>
 public class GetPersonsRequestHandler : IRequestHandler<GetPersonsRequest, GetPersonsResponse>
 {
   private readonly IPersonRepository _personRepository;
-  public GetPersonsRequestHandler(IPersonRepository personRepository)
-  {
+  public GetPersonsRequestHandler(IPersonRepository personRepository) =>
     _personRepository = personRepository;
-  }
-  public Task<GetPersonsResponse> Handle(GetPersonsRequest request, CancellationToken cancellationToken)
-  {
-    return _personRepository.GetPersons(request, cancellationToken);
-  }
+
+  public Task<GetPersonsResponse> Handle(GetPersonsRequest request, CancellationToken cancellationToken) =>
+    _personRepository.GetPersons(request, cancellationToken);
 }
 
 public class GetPersonsRequestValidator : AbstractValidator<GetPersonsRequest>

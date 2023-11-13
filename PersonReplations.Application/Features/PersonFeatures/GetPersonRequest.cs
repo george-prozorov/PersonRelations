@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using MediatR;
+using PersonReplations.Application.Features.Eceptions;
 using PersonReplations.Application.Features.PersonFeatures.Models;
 using PersonReplations.Application.Interfaces;
+using PersonReplations.Domain.Entities;
 using System.Text;
 
 namespace PersonReplations.Application.Features.PersonFeatures;
@@ -21,8 +23,8 @@ public class GetPersonRequestHandler : IRequestHandler<GetPersonRequest, GetPers
   }
   public async Task<GetPersonResponse?> Handle(GetPersonRequest request, CancellationToken cancellationToken)
   {
-    var person = await _personRepository.GetPersonFullInfo(request.PersonId, cancellationToken);
-    if (person == null) return null;
+    var person = await _personRepository.GetPersonFullInfo(request.PersonId, cancellationToken)
+      ?? throw new NotFoundException($"{nameof(Person)} with id {request.PersonId} was not found");
     var result = _mapper.Map<GetPersonResponse>(person);
     result.Image = await GetImageString(person.Id, person.ImagePath);
     return result;

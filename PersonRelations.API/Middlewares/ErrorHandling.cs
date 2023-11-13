@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using PersonReplations.Application.Features.Eceptions;
+using System.Diagnostics;
+using System.Net;
 
 namespace PersonRelations.API.Middlewares;
 
@@ -21,6 +23,10 @@ public class ErrorHandling
     {
       await _next(context);
     }
+    catch (NotFoundException)
+    {
+      context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+    }
     catch (Exception ex)
     {
 #if DEBUG
@@ -34,7 +40,7 @@ public class ErrorHandling
         context.Request.Path,
         "(500) Internal Server Error",
         _stopwatch.ElapsedMilliseconds);
-      context.Response.StatusCode = 500;
+      context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
       context.Response.Headers.Add("Traceid", context.TraceIdentifier);
       await context.Response.WriteAsJsonAsync(errorMessage);
     }

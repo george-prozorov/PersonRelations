@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.DependencyInjection;
-using PersonReplations.Application.Helpers;
 using System.Globalization;
 using System.Reflection;
 
@@ -24,7 +23,7 @@ public static class ApplicationRegisterServices
         new CultureInfo("ka-GE"),
         new CultureInfo("en-US")
       };
-      options.DefaultRequestCulture = new RequestCulture(new CultureInfo("ka-GE"));
+      options.DefaultRequestCulture = new RequestCulture(supportedCultures[0]);
       options.SupportedCultures = supportedCultures;
       options.SupportedUICultures = supportedCultures;
     });

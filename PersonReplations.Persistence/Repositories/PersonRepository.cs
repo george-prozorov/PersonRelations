@@ -20,32 +20,32 @@ public class PersonRepository : IPersonRepository
     _mapper = mapper;
   }
 
-  public async Task AddAsync<T>(T entity) where T : class
+  public async Task AddAsync<T>(T entity, CancellationToken cancellationToken = default) where T : class
   {
-    await _db.Set<T>().AddAsync(entity);
+    await _db.Set<T>().AddAsync(entity, cancellationToken);
   }
 
-  public async Task<T?> GetByIdAsync<T>(int id) where T : class
+  public async Task<T?> GetByIdAsync<T>(int id, CancellationToken cancellationToken = default) where T : class
   {
-    return await _db.Set<T>().FindAsync(id);
+    return await _db.Set<T>().FindAsync(id, cancellationToken);
   }
 
-  public async Task<List<Relation>> GetPerosnRelations(int PersonId)
+  public async Task<List<Relation>> GetPerosnRelations(int PersonId, CancellationToken cancellationToken = default)
   {
     return await _db.Relations
       .Include(x => x.PersonRelations)
       .Where(x => x.PersonRelations.Any(x => x.PersonId == PersonId))
-      .ToListAsync();
+      .ToListAsync(cancellationToken);
   }
 
-  public Task<Person> GetPersonForUpdate(int id)
+  public Task<Person> GetPersonForUpdate(int id, CancellationToken cancellationToken = default)
   {
     return _db.Persons
       .Include(x => x.Contacts)
       .Include(x => x.PersonRelations)
-      .ThenInclude(x => x.Relation)
-      .ThenInclude(x => x!.PersonRelations)
-      .FirstAsync(x => x.Id == id);
+        .ThenInclude(x => x.Relation)
+          .ThenInclude(x => x!.PersonRelations)
+      .FirstAsync(x => x.Id == id, cancellationToken);
   }
 
   public Task<Person?> GetPersonFullInfo(int personId, CancellationToken cancellationToken)
@@ -54,14 +54,14 @@ public class PersonRepository : IPersonRepository
       .Include(x => x.Gender)
       .Include(x => x.City)
       .Include(x => x.Contacts)
-      .ThenInclude(x => x.ContactType)
+        .ThenInclude(x => x.ContactType)
       .Include(x => x.PersonRelations)
-      .ThenInclude(x => x.Relation)
-      .ThenInclude(x => x!.PersonRelations)
-      .ThenInclude(x => x.Person)
+        .ThenInclude(x => x.Relation)
+          .ThenInclude(x => x!.PersonRelations)
+            .ThenInclude(x => x.Person)
       .Include(x => x.PersonRelations)
-      .ThenInclude(x => x.Relation)
-      .ThenInclude(x => x!.RelationType);
+         .ThenInclude(x => x.Relation)
+           .ThenInclude(x => x!.RelationType);
     return query.FirstOrDefaultAsync(x => x.Id == personId, cancellationToken);
   }
 
@@ -73,8 +73,8 @@ public class PersonRepository : IPersonRepository
       .Include(x => x.Gender)
       .Include(x => x.City)
       .Include(x => x.PersonRelations)
-      .ThenInclude(x => x.Relation)
-      .ThenInclude(x => x!.PersonRelations)
+        .ThenInclude(x => x.Relation)
+          .ThenInclude(x => x!.PersonRelations)
       .Where(x =>
         (string.IsNullOrEmpty(request.FirstName) || EF.Functions.Like(x.FirstName, "%" + request.FirstName + "%")) &&
         (string.IsNullOrEmpty(request.LastName) || EF.Functions.Like(x.LastName, "%" + request.LastName + "%")) &&
@@ -89,7 +89,9 @@ public class PersonRepository : IPersonRepository
       ).Select(x => _mapper.Map<PersonsListItem>(x));
     result.CurrentPage = request.PageNumber!.Value;
     result.TotalRecords = await query.CountAsync(cancellationToken);
-    result.Persons = await query.Pagination(request.PageNumber!.Value, request.PageSize!.Value).ToListAsync(cancellationToken);
+    result.Persons = await query
+                            .Paginate(request.PageNumber!.Value, request.PageSize!.Value)
+                            .ToListAsync(cancellationToken);
     return result;
   }
 
@@ -99,7 +101,7 @@ public class PersonRepository : IPersonRepository
     var query = _db.Persons
       .Join(_db.PersonRelations
                   .Include(x => x.Relation)
-                  .ThenInclude(x => x!.RelationType),
+                    .ThenInclude(x => x!.RelationType),
                   p => p.Id,
                   pr => pr.PersonId,
                   (p, pr) => new { Person = p, PersonRelation = pr })
@@ -115,7 +117,9 @@ public class PersonRepository : IPersonRepository
         RelationType = x.Key.RelationType,
         Count = x.Count(),
       });
-    result.Stats = await query.Pagination(request.PageNumber!.Value, request.PageSize!.Value).ToListAsync(cancellationToken);
+    result.Stats = await query
+                          .Paginate(request.PageNumber!.Value, request.PageSize!.Value)
+                          .ToListAsync(cancellationToken);
     result.CurrentPage = request.PageNumber!.Value;
     result.TotalRecords = await query.CountAsync(cancellationToken);
     return result;

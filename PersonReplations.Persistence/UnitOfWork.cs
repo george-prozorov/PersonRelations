@@ -18,10 +18,4 @@ public class UnitOfWork : IUnitOfWork
   {
     return _db.SaveChangesAsync();
   }
-
-  public void Dispose()
-  {
-    _db.Dispose();
-    GC.SuppressFinalize(this);
-  }
 }

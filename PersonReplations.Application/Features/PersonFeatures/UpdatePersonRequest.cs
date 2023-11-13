@@ -25,10 +25,10 @@ internal class UpdatePersonRequestHandler : IRequestHandler<UpdatePersonRequest>
   }
   public async Task Handle(UpdatePersonRequest request, CancellationToken cancellationToken)
   {
-    var person = await _unitOfWork.PersonRepository.GetPersonForUpdate((int)request.PersonId!);
+    var person = await _unitOfWork.PersonRepository.GetPersonForUpdate(request.PersonId!.Value);
     person!.Update(request.FirstName,
                    request.LastName,
-                   request.Genderid,
+                   request.GenderId,
                    request.PersonalId,
                    request.BirthDate,
                    request.CityId);
@@ -64,7 +64,7 @@ public class UpdatePersonRequestValidator : AbstractValidator<UpdatePersonReques
       .WithMessage(x => string.Format(localizer["NotAllowedCharacters"], nameof(x.LastName)))
       .Matches(@"^(?:[A-Za-z]+|[ა-ჰ]+)$")
       .WithMessage(x => string.Format(localizer["NotTogether"], nameof(x.LastName)));
-    RuleFor(x => x.Genderid)
+    RuleFor(x => x.GenderId)
       .NotNull()
       .GreaterThan(0)
       .MustAsync(async (id, canncelationToken) =>

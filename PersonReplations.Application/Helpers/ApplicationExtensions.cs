@@ -7,12 +7,12 @@ public static class ApplicationExtensions
 {
   public static bool IsMature(this DateTime? birthDate)
   {
-    if (birthDate == null) return false;
+    if (birthDate is null) return false;
     var dateOfBirth = birthDate.Value;
-    int age = 0;
+    int age;
     age = DateTime.Now.Year - dateOfBirth.Year;
     if (DateTime.Now.DayOfYear < dateOfBirth.DayOfYear)
-      age = age - 1;
+      age--;
 
     return age >= 18;
   }
@@ -20,10 +20,8 @@ public static class ApplicationExtensions
   {
     try
     {
-      using (var image = Image.Load<Rgba32>(file.OpenReadStream()))
-      {
-        return true;
-      }
+      using var image = Image.Load<Rgba32>(file.OpenReadStream());
+      return true;
     }
     catch (Exception)
     {

@@ -41,10 +41,8 @@ app.UseRequestLocalization(localizeOptions!.Value);
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+app.UseMiddleware<ErrorHandling>();
 
 app.MapControllers();
-
-app.UseMiddleware<ErrorHandling>();
 
 app.Run();
