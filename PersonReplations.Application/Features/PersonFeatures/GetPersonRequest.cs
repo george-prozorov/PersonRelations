@@ -21,7 +21,7 @@ public class GetPersonRequestHandler : IRequestHandler<GetPersonRequest, GetPers
   }
   public async Task<GetPersonResponse?> Handle(GetPersonRequest request, CancellationToken cancellationToken)
   {
-    var person = await _personRepository.GetPersonFullInfo(request.PersonId);
+    var person = await _personRepository.GetPersonFullInfo(request.PersonId, cancellationToken);
     if (person == null) return null;
     var result = _mapper.Map<GetPersonResponse>(person);
     result.Image = await GetImageString(person.Id, person.ImagePath);

@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using PersonReplations.Application.Features.PersonFeatures.Models;
 using PersonReplations.Application.Features.PersonsFeatures.Models;
 using PersonReplations.Application.Interfaces;
@@ -16,7 +17,18 @@ public class GetStatisticsRequestHandler : IRequestHandler<GetStatisticsRequest,
   }
   public Task<GetStatisticsResponse> Handle(GetStatisticsRequest request, CancellationToken cancellationToken)
   {
-    //return paginatio info hear an there
-    return _repository.GetStatistics(request);
+    return _repository.GetStatistics(request, cancellationToken);
+  }
+  public class GetStatisticsRequestValidator : AbstractValidator<GetStatisticsRequest>
+  {
+    public GetStatisticsRequestValidator()
+    {
+      RuleFor(x => x.PageNumber)
+        .NotNull()
+        .GreaterThan(0);
+      RuleFor(x => x.PageSize)
+        .NotNull()
+        .GreaterThan(0);
+    }
   }
 }

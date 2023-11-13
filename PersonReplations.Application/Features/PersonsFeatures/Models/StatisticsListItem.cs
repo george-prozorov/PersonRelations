@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace PersonReplations.Application.Features.PersonsFeatures.Models
 {
-  public class GetPersonsResponse : PaginationInfo
+  public class StatisticsListItem
   {
-    public IEnumerable<PersonsListItem> Persons { get; set; } = new List<PersonsListItem>();
+    public string Person { get; set; } = string.Empty;
+    public string RelationType { get; set; } = string.Empty;
+    public int Count { get; set; }
+
   }
 }

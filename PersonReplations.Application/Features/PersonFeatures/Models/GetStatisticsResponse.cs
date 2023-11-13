@@ -1,5 +1,8 @@
-﻿namespace PersonReplations.Application.Features.PersonFeatures.Models;
+﻿using PersonReplations.Application.Features.PersonsFeatures.Models;
 
-public class GetStatisticsResponse
+namespace PersonReplations.Application.Features.PersonFeatures.Models;
+
+public class GetStatisticsResponse : PaginationInfo
 {
+  public IEnumerable<StatisticsListItem> Stats { get; set; } = new List<StatisticsListItem>();
 }

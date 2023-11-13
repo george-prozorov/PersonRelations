@@ -1,5 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using PersonReplations.Application.Features.PersonFeatures;
+using PersonReplations.Application.Features.PersonFeatures.Models;
 using PersonReplations.Application.Features.PersonsFeatures;
+using PersonReplations.Application.Features.PersonsFeatures.Models;
 using PersonReplations.Application.Interfaces;
 using PersonReplations.Domain.Entities;
 using PersonReplations.Persistence.Helpers;
@@ -9,9 +13,11 @@ namespace PersonReplations.Persistence.Repositories;
 public class PersonRepository : IPersonRepository
 {
   private readonly PersonRelationsDbContext _db;
-  public PersonRepository(PersonRelationsDbContext db)
+  private readonly IMapper _mapper;
+  public PersonRepository(PersonRelationsDbContext db, IMapper mapper)
   {
     _db = db;
+    _mapper = mapper;
   }
 
   public async Task AddAsync<T>(T entity) where T : class
@@ -42,7 +48,7 @@ public class PersonRepository : IPersonRepository
       .FirstAsync(x => x.Id == id);
   }
 
-  public Task<Person?> GetPersonFullInfo(int personId)
+  public Task<Person?> GetPersonFullInfo(int personId, CancellationToken cancellationToken)
   {
     var query = _db.Persons
       .Include(x => x.Gender)
@@ -56,12 +62,13 @@ public class PersonRepository : IPersonRepository
       .Include(x => x.PersonRelations)
       .ThenInclude(x => x.Relation)
       .ThenInclude(x => x!.RelationType);
-    var cmd = query.ToQueryString();
-    return query.FirstOrDefaultAsync(x => x.Id == personId);
+    return query.FirstOrDefaultAsync(x => x.Id == personId, cancellationToken);
   }
 
-  public async Task<IEnumerable<Person>> GetPersons(GetPersonsRequest request)
+  public async Task<GetPersonsResponse> GetPersons(GetPersonsRequest request, CancellationToken cancellationToken)
   {
+    var result = new GetPersonsResponse();
+
     var query = _db.Persons
       .Include(x => x.Gender)
       .Include(x => x.City)
@@ -74,10 +81,42 @@ public class PersonRepository : IPersonRepository
         (string.IsNullOrEmpty(request.PersonalId) || EF.Functions.Like(x.PersonalId, "%" + request.PersonalId + "%")) &&
         (!request.GenderId.HasValue || x.GenderId == request.GenderId) &&
         (!request.CityId.HasValue || x.CityId == request.CityId) &&
+        (!request.BirtDateFrom.HasValue || x.BirthDate >= request.BirtDateFrom.Value.Date) &&
+        (!request.BirtDateTo.HasValue || x.BirthDate <= request.BirtDateTo.Value.Date) &&
         (!request.RelativeId.HasValue ||
         x.PersonRelations.Any(y => y.Relation!.PersonRelations
             .Any(z => z.PersonId != x.Id && z.PersonId == request.RelativeId)))
-      );
-    return await query.Pagination(request.PageNumber!.Value, request.PageSize!.Value).ToListAsync();
+      ).Select(x => _mapper.Map<PersonsListItem>(x));
+    result.TotalRecords = await query.CountAsync(cancellationToken);
+    result.Persons = await query.Pagination(request.PageNumber!.Value, request.PageSize!.Value).ToListAsync(cancellationToken);
+    return result;
+  }
+
+  public async Task<GetStatisticsResponse> GetStatistics(GetStatisticsRequest request, CancellationToken cancellationToken)
+  {
+    var result = new GetStatisticsResponse();
+    var query = _db.Persons
+      .Join(_db.PersonRelations
+                  .Include(x => x.Relation)
+                  .ThenInclude(x => x.RelationType),
+                  p => p.Id,
+                  pr => pr.PersonId,
+                  (p, pr) => new { Person = p, PersonRelation = pr })
+      .GroupBy(x => new
+      {
+        x.Person.FirstName,
+        x.Person.LastName,
+        RelationType = x.PersonRelation.Relation!.RelationType!.DisplayName
+      })
+      .Select(x => new StatisticsListItem
+      {
+        Person = x.Key.FirstName + " " + x.Key.LastName,
+        RelationType = x.Key.RelationType,
+        Count = x.Count(),
+      });
+    result.Stats = await query.Pagination(request.PageNumber!.Value, request.PageSize!.Value).ToListAsync(cancellationToken);
+    result.CurrentPage = request.PageNumber!.Value;
+    result.TotalRecords = await query.CountAsync(cancellationToken);
+    return result;
   }
 }

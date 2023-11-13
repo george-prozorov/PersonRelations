@@ -9,7 +9,7 @@ using PersonReplations.Domain.Entities;
 
 namespace PersonReplations.Application.Features.PersonsFeatures;
 
-public class GetPersonsRequest : Pagination, IRequest<IEnumerable<GetPersonsResponse>>
+public class GetPersonsRequest : Pagination, IRequest<GetPersonsResponse>
 {
   public string? FirstName { get; set; }
   public string? LastName { get; set; }
@@ -18,9 +18,11 @@ public class GetPersonsRequest : Pagination, IRequest<IEnumerable<GetPersonsResp
   public int? GenderId { get; set; }
   public int? CityId { get; set; }
   public int? RelativeId { get; set; }
+  public DateTime? BirtDateFrom { get; set; }
+  public DateTime? BirtDateTo { get; set; }
 }
 
-public class GetPersonsRequestHandler : IRequestHandler<GetPersonsRequest, IEnumerable<GetPersonsResponse>>
+public class GetPersonsRequestHandler : IRequestHandler<GetPersonsRequest, GetPersonsResponse>
 {
   private readonly IPersonRepository _personRepository;
   private readonly IMapper _mapper;
@@ -29,10 +31,9 @@ public class GetPersonsRequestHandler : IRequestHandler<GetPersonsRequest, IEnum
     _personRepository = personRepository;
     _mapper = mapper;
   }
-  public async Task<IEnumerable<GetPersonsResponse>> Handle(GetPersonsRequest request, CancellationToken cancellationToken)
+  public Task<GetPersonsResponse> Handle(GetPersonsRequest request, CancellationToken cancellationToken)
   {
-    IEnumerable<Person> persons = await _personRepository.GetPersons(request);
-    return _mapper.Map<IEnumerable<GetPersonsResponse>>(persons);
+    return _personRepository.GetPersons(request, cancellationToken);
   }
 }
 

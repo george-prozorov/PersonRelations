@@ -29,7 +29,7 @@ internal class AutoMapperProfile : Profile
       .ForMember(dst => dst.RelativePersonId, opt => opt.MapFrom(src => src.Relation!.PersonRelations.First(x => x.PersonId != src.PersonId).PersonId))
       .ForMember(dst => dst.RelativePerson, opt => opt.MapFrom(src => src.Relation!.PersonRelations.First(x => x.PersonId != src.PersonId).Person!.GetPersonName()));
 
-    CreateMap<Person, GetPersonsResponse>()
+    CreateMap<Person, PersonsListItem>()
       .ForMember(dst => dst.Gender, opt => opt.MapFrom(src => src.Gender!.DisplayName))
       .ForMember(dst => dst.City, opt => opt.MapFrom(src => src.City!.DisplayName));
   }

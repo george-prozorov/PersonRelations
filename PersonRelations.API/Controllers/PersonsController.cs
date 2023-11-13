@@ -15,15 +15,15 @@ public class PersonsController : ControllerBase
     _sender = sender;
   }
   [HttpPost]
-  public async Task<IActionResult> GetPersons(GetPersonsRequest request)
+  public async Task<IActionResult> GetPersons(GetPersonsRequest request, CancellationToken cancellationToken)
   {
-    var result = await _sender.Send(request);
+    var result = await _sender.Send(request, cancellationToken);
     return Ok(result);
   }
   [HttpPost]
-  public async Task<IActionResult> GetStatistiics(GetStatisticsRequest request)
+  public async Task<IActionResult> GetStatistiics(GetStatisticsRequest request, CancellationToken cancellationToken)
   {
-    var resul = _sender.Send(request);
+    var resul = await _sender.Send(request, cancellationToken);
     return Ok(resul);
   }
 }
