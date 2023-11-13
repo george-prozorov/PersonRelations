@@ -25,11 +25,9 @@ public class GetPersonsRequest : Pagination, IRequest<GetPersonsResponse>
 public class GetPersonsRequestHandler : IRequestHandler<GetPersonsRequest, GetPersonsResponse>
 {
   private readonly IPersonRepository _personRepository;
-  private readonly IMapper _mapper;
-  public GetPersonsRequestHandler(IPersonRepository personRepository, IMapper mapper)
+  public GetPersonsRequestHandler(IPersonRepository personRepository)
   {
     _personRepository = personRepository;
-    _mapper = mapper;
   }
   public Task<GetPersonsResponse> Handle(GetPersonsRequest request, CancellationToken cancellationToken)
   {

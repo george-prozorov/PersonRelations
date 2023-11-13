@@ -87,6 +87,7 @@ public class PersonRepository : IPersonRepository
         x.PersonRelations.Any(y => y.Relation!.PersonRelations
             .Any(z => z.PersonId != x.Id && z.PersonId == request.RelativeId)))
       ).Select(x => _mapper.Map<PersonsListItem>(x));
+    result.CurrentPage = request.PageNumber!.Value;
     result.TotalRecords = await query.CountAsync(cancellationToken);
     result.Persons = await query.Pagination(request.PageNumber!.Value, request.PageSize!.Value).ToListAsync(cancellationToken);
     return result;
@@ -98,7 +99,7 @@ public class PersonRepository : IPersonRepository
     var query = _db.Persons
       .Join(_db.PersonRelations
                   .Include(x => x.Relation)
-                  .ThenInclude(x => x.RelationType),
+                  .ThenInclude(x => x!.RelationType),
                   p => p.Id,
                   pr => pr.PersonId,
                   (p, pr) => new { Person = p, PersonRelation = pr })

@@ -16,8 +16,8 @@ public class Person : EntityBase
   public City? City { get; set; }
   public string? ImagePath { get; set; }
 
-  public IEnumerable<Contact> Contacts { get; set; }
-  public IEnumerable<PersonRelation> PersonRelations { get; set; }
+  public IEnumerable<Contact> Contacts { get; set; } = new List<Contact>();
+  public IEnumerable<PersonRelation> PersonRelations { get; set; } = new List<PersonRelation>();
 
   public void Deactivate()
   {

@@ -2,5 +2,5 @@
 
 public class AppSettings
 {
-  public string ImageFolder { get; set; }
+  public string ImageFolder { get; set; } = string.Empty;
 }
